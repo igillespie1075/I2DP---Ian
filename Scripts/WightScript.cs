@@ -5,6 +5,11 @@ using UnityEngine;
 public class WightScript : MonoBehaviour
 {
 
+
+    //Same as enemy script but for the spear enemy
+
+
+
     public Rigidbody2D enemyRb;
     private GameObject player;
     public float speed = 2f;

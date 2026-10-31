@@ -5,6 +5,13 @@ using UnityEngine;
 public class BossController : MonoBehaviour
 {
 
+
+
+    //Same as the EnemyController but for the boss
+
+
+
+
     public Rigidbody2D enemyRb;
     private GameObject player;
     public float speed = 2f;

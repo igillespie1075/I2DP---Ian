@@ -30,6 +30,7 @@ public class SwordBack : MonoBehaviour
 
     }
 
+    //checks if player is inside of sword background collider and grabs the sword
     private void OnTriggerStay2D(Collider2D other)
     {
         PlayerController player = other.GetComponent<PlayerController>();

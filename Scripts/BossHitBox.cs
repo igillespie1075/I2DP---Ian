@@ -5,6 +5,11 @@ using UnityEngine;
 public class BossHitBox : MonoBehaviour
 {
 
+
+    //Same as SwordHitbox but for the boss hitbox
+
+
+
     private int parryCount = 0;
     private float stunTime = 2f;
     private float stunTimeWindow = 1f;

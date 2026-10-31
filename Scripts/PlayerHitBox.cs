@@ -21,7 +21,7 @@ public class PlayerHitBox : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
 
-
+        //Checks if player hitbox hits enemy, shakes screen if hits, and stops frame if hits 
         if (other.CompareTag("Enemy"))
         {
 
@@ -34,6 +34,7 @@ public class PlayerHitBox : MonoBehaviour
 
         }
 
+        //Same for boss
         if (other.CompareTag("Boss"))
         {
 
@@ -44,6 +45,7 @@ public class PlayerHitBox : MonoBehaviour
             player.StartCoroutine(player.HitStop(0.08f));
         }
 
+        //Same for the tall enemy
         if (other.CompareTag("wight"))
         {
 
@@ -54,13 +56,16 @@ public class PlayerHitBox : MonoBehaviour
             player.StartCoroutine(player.HitStop(0.08f));
         }
 
-
+        //Breaks the blue doors when player hits them
         else if (other.CompareTag("BreakDoor"))
         {           
             
             Destroy(other.gameObject);
             
         }
+
+        //Checks if player has the new sword that can break the yellow doors
+
         else if (other.CompareTag("BreakYellowDoor"))
         {
             if (PlayerController.hasSword)

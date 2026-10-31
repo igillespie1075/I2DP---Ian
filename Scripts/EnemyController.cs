@@ -38,6 +38,7 @@ public class EnemyController : MonoBehaviour
         playerController = player.GetComponent<PlayerController>();
         spriteRenderer = GetComponent<SpriteRenderer>();
 
+        //The lives of the enemies besides the boss gets lowered to 3 when the player gets the new sword
         if (PlayerController.hasSword)
         {
             lives = 3;
@@ -64,9 +65,11 @@ public class EnemyController : MonoBehaviour
             return;
         }
 
+        //Gets the distance from the player
         float distance = Vector2.Distance(transform.position, player.transform.position);
         Vector3 scale = transform.localScale;
 
+        //Flips the enemy and its colliders based on where the player is
         if(player.transform.position.x < transform.position.x)
         {
             scale.x = Mathf.Abs(scale.x);
@@ -77,6 +80,7 @@ public class EnemyController : MonoBehaviour
         }
         transform.localScale = scale;
 
+        //Tells the enemy when to start attacking and changes the enemy attack animations
         if (distance <= attackDistance)
         {
             enemyRb.velocity = new Vector2(0, enemyRb.velocity.y);
@@ -95,7 +99,7 @@ public class EnemyController : MonoBehaviour
             return;
         }
 
-
+        //Moves the enemy torwards player
         if (distance <= chaseDistance && !isAttacking) 
         {
             float direction = Mathf.Sign(player.transform.position.x - transform.position.x);
@@ -115,6 +119,7 @@ public class EnemyController : MonoBehaviour
 
     }
 
+    //Animation even that allows enemy to play other animations and updates attack number
     void FinishAttack()
     {
         Debug.Log("finished " + attackNumber);
@@ -126,18 +131,21 @@ public class EnemyController : MonoBehaviour
             attackNumber = 1;
     }
 
-
+    //Enables the capsule collider (enemy hit box) on the child object
     void EnableSwordBox()
     {
         collider.enabled = true;
         Debug.Log("enabled");
     }
 
+    //disables the hitbox
     void DisableSwordBox()
     {
         collider.enabled = false;
     }
 
+
+    //Allows the enemy to lose lives and activate hit behavior
     public void GetHit()
     {
         if (isDead)
@@ -153,6 +161,7 @@ public class EnemyController : MonoBehaviour
             StartCoroutine(HitReaction());
         }      
 
+        //destroys enemy objects when their lives hit zero and gives the player lives when an enemy dies
         else
         {
             isDead = true;
@@ -168,7 +177,7 @@ public class EnemyController : MonoBehaviour
        
     }
 
-
+    //The hit behavior that stops enemy from moving and player hit animation
     private IEnumerator HitReaction()
     {
         
@@ -184,12 +193,13 @@ public class EnemyController : MonoBehaviour
     }
 
     
-
+    //stun method that gets called from sword hit box
     public void Stunned(float time)
     {
         StartCoroutine(StunRoutine(time));               
     }
 
+    //Puts the enemy in a stunned state for a certain amount of time
     private IEnumerator StunRoutine(float time)
     {
         isStunned = true;

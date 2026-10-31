@@ -14,9 +14,11 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
+        //allows the camera to follow the player with and offset
         transform.position = player.transform.position + offset;
     }
 
+    //Allows camera shake when players hits an enemy
     public IEnumerator Shake(float duration, float magnitude)
     {
         Vector3 originalPosition = transform.localPosition;

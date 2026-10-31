@@ -94,11 +94,14 @@ public class PlayerController : MonoBehaviour
         doorAnim = door.GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         collider.enabled = false;
+
+        //If I grab new sword, swap animation controller
         if (hasSword)
         {
             SwapAnimator();
         }
 
+        //Checks where to spawn after going from scene 2, and scene 3 back to the first scene
         if (spawnToUse == 1)
         {
             GameObject spawn = GameObject.Find("Spawn1");
@@ -125,7 +128,7 @@ public class PlayerController : MonoBehaviour
     {
 
         
-
+        //Checks if player can grab the new sword
         if(canSwapAnimator && Input.GetKeyDown(KeyCode.E))
         {
             StartCoroutine(GrabSword());
@@ -139,6 +142,7 @@ public class PlayerController : MonoBehaviour
         horizontalInput = Input.GetAxis("Horizontal");
         upInput = Input.GetAxis("Vertical");
 
+        //Left click starts attack
         if (Input.GetButtonDown("Fire1"))
         {
             if(!isJumping && !isAttacking && staminaNumber != 0)
@@ -148,6 +152,7 @@ public class PlayerController : MonoBehaviour
 
         }
 
+        //Stops the player from attacking after 5 attacks, starts timer to get 5 attacks back
         if (staminaNumber <= 0)
         {
             attackTimer -= Time.deltaTime;
@@ -159,7 +164,7 @@ public class PlayerController : MonoBehaviour
         }
 
 
-
+        //Flips the player along with its colliders
         if (horizontalInput < 0f)
         {
             Vector3 scale = transform.localScale;
@@ -183,11 +188,12 @@ public class PlayerController : MonoBehaviour
             playerAnim.SetBool("isWalking", false);
         }
 
+        //Wall jump checks
         touchingLeftWall = Physics2D.OverlapCircle(leftWallCheck.position, wallCheckRadius, wallLayer);
         touchingRightWall = Physics2D.OverlapCircle(rightWallCheck.position, wallCheckRadius, wallLayer);
 
 
-
+        //Checks if player is jumping, double jumping, or wall jumping
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (touchingLeftWall && !isAttacking)
@@ -229,7 +235,7 @@ public class PlayerController : MonoBehaviour
             }
         }
        
-
+        //Checks for right click so player can block
         if (!isAttacking)
         {
             isBlocking = Input.GetMouseButton(1);
@@ -243,6 +249,7 @@ public class PlayerController : MonoBehaviour
             playerAnim.SetBool("isBlocking", false);
         }
 
+        //Enables the player to parry within the window
         if (Input.GetMouseButtonDown(1) && !isAttacking)
         {
             canParry = true;
@@ -267,6 +274,7 @@ public class PlayerController : MonoBehaviour
         isWallJumping = false;
     }
 
+    //Allows player to move, but stops movement if certain bools are true
     private void FixedUpdate()
     {
         if (isDead)
@@ -284,6 +292,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    //Plays music when in a certain area, detects that the player is allowed to swap animators, and allows player to go through door in third scene if they have the key from the second scene
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("ShadowFloor"))
@@ -309,7 +318,7 @@ public class PlayerController : MonoBehaviour
 
 
     }
-
+    //Player can't swap animators when outside of the sword background collider area
     private void OnCollisionExit2D(Collision2D collision)
     {       
 
@@ -319,6 +328,8 @@ public class PlayerController : MonoBehaviour
         }       
 
     }
+
+    //Loads certain scenes based on the collider that was touched, detects when player is going back to the original scene, and allows the player to collects the key
     private void OnTriggerEnter2D(Collider2D other)
     {
         
@@ -354,7 +365,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
+    //Changes attack animations based on the attack number, adds horizontal force the player when attacking, negates the player stamina with each attack, and checks when to set no stamina timer
     public void Attack()
     {
         attackTimer = noAttackTime;
@@ -394,6 +405,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    //Plays parry animation and sounds and adds force (from the enemy hitbox) to player when parrying
     public void Parry(float force)
     {
         isAttacking = false;
@@ -428,6 +440,7 @@ public class PlayerController : MonoBehaviour
         Invoke(nameof(EndKnockBack), KnockBackTime);
     }
 
+    //Adds force and sound to blocking
     public void Block(float force)
     {
         audioSource2.PlayOneShot(BlockSound);
@@ -438,23 +451,26 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    //Ends knockback so player can move again
     private void EndKnockBack()
     {
         isPushed = false;
     }
 
+    //Gets player's direction so forces can be applied to player in the correct directions
     private float FacingDirection()
     {
         return transform.localScale.x > 0 ? 1f : -1f; 
     }
 
-
+    //Animation event that allows other animations to play when an attack ends
     public void EndAttack()
     {
         isAttacking = false;        
 
     }
 
+    //Checks the players lives, lets the player get hit and die
     public void GetHit()
     {
         if(isDead) 
@@ -480,16 +496,18 @@ public class PlayerController : MonoBehaviour
         }        
     }
     
+    //Animation even that enables capsule collider (hitbox) on player sword at specific point in the animation
     void EnableSwordBox()
     {
         collider.enabled = true;
     }
-
+    //Animation even that disables the hitbox
     void DisableSwordBox()
     {
         collider.enabled = false;
     }
 
+    //Freezes frame when the player hits an enemy
     public IEnumerator HitStop(float duration)
     {
         Time.timeScale = 0.05f;
@@ -499,6 +517,7 @@ public class PlayerController : MonoBehaviour
         Time.timeScale = 1f;
     }
 
+    //loads a new scene after a certain amount of time when the player grabs the new sword
     private IEnumerator GrabSword()
     {
         isGrabbing = true;
@@ -509,6 +528,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    //Swaps the player animator in runtime. 
     public void SwapAnimator()
     {
         if (!usingNewController)

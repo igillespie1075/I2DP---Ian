@@ -22,7 +22,7 @@ public class HealthUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        //Get the players max health and current health to know how many full hearts and empty hearts to display on UI. 
         health = PlayerController.lives;
         maxHealth = player.maxHealth;
         for (int i = 0; i < hearts.Length; i++)

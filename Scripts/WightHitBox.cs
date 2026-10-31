@@ -5,6 +5,11 @@ using UnityEngine;
 public class WightHitBox : MonoBehaviour
 {
 
+    
+    //Same as SwordHitBox but for the spear enemy hitbox
+
+
+
     private int parryCount = 0;
     private float stunTime = 2f;
     private float stunTimeWindow = 1f;

@@ -18,6 +18,8 @@ public class SwordHitBox : MonoBehaviour
     }
 
     // Update is called once per frame
+
+    //Checks if the player parries a certain amount of attacks within a time frame so that enemies can be stunned
     void Update()
     {
         if(parryCount > 0)
@@ -42,9 +44,10 @@ public class SwordHitBox : MonoBehaviour
         PlayerController player = other.GetComponent<PlayerController>();
         EnemyController enemy = GetComponentInParent<EnemyController>();
 
-       
+        //Checks if player can parry (right clicks when enemy hitbox hits player)
         if (player.canParry)
         {
+            //applies varried forces to player based on enemy attack number
 
             float force = enemy.attackNumber == 3 ? 1f : 0.5f;
             player.Parry(force);
@@ -52,6 +55,7 @@ public class SwordHitBox : MonoBehaviour
 
             parryTimer = stunTimeWindow;
 
+            //stuns enemy if parried enough within time frame
             if (parryCount == 3)
             {
                 enemy.Stunned(stunTime);
@@ -63,7 +67,7 @@ public class SwordHitBox : MonoBehaviour
         }
         
        
-
+        //checks if player blocked and applies force to player
         else if (player.isBlocking)
         {
             player.Block(2);
@@ -71,6 +75,7 @@ public class SwordHitBox : MonoBehaviour
             return;
         }
 
+        //otherwise the player was hit
         else
         {
             player.GetHit();            
